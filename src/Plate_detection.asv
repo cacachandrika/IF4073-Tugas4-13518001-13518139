@@ -1,9 +1,15 @@
+close all;
+clear all;
+
 function [cropped_img, noPlate] = Plate_detection(img)
+    img = imread('Number Plate Images/image1.png');
     imgray = rgb2gray(img);
     imbin = imbinarize(imgray);
-    edge_img = edge(imgray,'log');
+    im1 = edge(imgray,'log');
+    figure; imshow(im1); 
     
-%     edge_img = logauss(imgray);
+    edge_img = logauss(imgray);
+    figure; imshow(edge_img); figure;
     
     % Find location of number plate
     Iprops = regionprops(edge_img,'BoundingBox','Area', 'Image');
@@ -11,24 +17,37 @@ function [cropped_img, noPlate] = Plate_detection(img)
     count = numel(Iprops);
     maxa = area;
     bb = Iprops.BoundingBox;
-
+    % disp(bb);
     for i = 1:count
+        
        if (maxa < Iprops(i).Area)
            maxa = Iprops(i).Area;
            bb = Iprops(i).BoundingBox;
        end
     end 
-
     % Crop image
     cropped_img = imcrop(imbin, bb);
     cropped_img = bwareaopen(~cropped_img, 500);
     [h, w] = size(cropped_img);
     
-    Iprops=regionprops(cropped_img,'BoundingBox','Area', 'Image');
+%     Iprops1 = regionprops(im1,'BoundingBox','Area', 'Image');
+%     area1 = Iprops1.Area;
+%     count1 = numel(Iprops1);
+%     maxa1 = area1;
+%     bb1 = Iprops1.BoundingBox;
+%     % disp(bb1);
+%     for i = 1:count1
+%         disp(Iprops1(i));
+%        if (maxa1 < Iprops1(i).Area)
+%            maxa1 = Iprops1(i).Area;
+%            bb1 = Iprops1(i).BoundingBox;
+%        end
+%     end    
+    
+    Iprops=regionprops(im,'BoundingBox','Area', 'Image');
     count = numel(Iprops);
     noPlate=[];
     
-    % Letter detection
     for i = 1:count
        ow = length(Iprops(i).Image(1,:));
        oh = length(Iprops(i).Image(:,1));
@@ -38,5 +57,5 @@ function [cropped_img, noPlate] = Plate_detection(img)
        end
     end
     
-    disp(noPlate);
+%     disp(noPlate);
 end
