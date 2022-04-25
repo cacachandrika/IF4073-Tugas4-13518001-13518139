@@ -3,7 +3,6 @@ function letter = Letter_detection(snap)
     load NewTemplates
     snap = imresize(snap,[42 24]);
     rec=[ ];
-    % disp(NewTemplates(:,1:24));
 
     for n=1:36
         a = 1+24*(n-1);
@@ -67,7 +66,7 @@ function letter = Letter_detection(snap)
         case 25
             letter = 'Y';
         case 26
-            letter='Z';
+            letter = 'Z';
         case 27
             letter = '1';
         case 28

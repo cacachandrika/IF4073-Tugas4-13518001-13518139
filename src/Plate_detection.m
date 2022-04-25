@@ -1,15 +1,14 @@
 function [cropped_img, noPlate] = Plate_detection(img)
     imgray = rgb2gray(img);
     imbin = imbinarize(imgray);
-    edge_img = edge(imgray,'log');
-    
-%     edge_img = logauss(imgray);
+
+    edge_img = edge(imgray,'prewitt');
     
     % Find location of number plate
     Iprops = regionprops(edge_img,'BoundingBox','Area', 'Image');
     area = Iprops.Area;
-    count = numel(Iprops);
     maxa = area;
+    count = numel(Iprops);
     bb = Iprops.BoundingBox;
 
     for i = 1:count
@@ -24,7 +23,7 @@ function [cropped_img, noPlate] = Plate_detection(img)
     cropped_img = bwareaopen(~cropped_img, 500);
     [h, w] = size(cropped_img);
     
-    Iprops=regionprops(cropped_img,'BoundingBox','Area', 'Image');
+    Iprops = regionprops(cropped_img,'BoundingBox','Area', 'Image');
     count = numel(Iprops);
     noPlate=[];
     
